@@ -206,6 +206,7 @@ resource "proxmox_virtual_environment_vm" "example" {
   }
   agent {
     enabled = true
+    trim    = true
   }
   # NB we use a custom user data because this terraform provider initialization
   #    block is not entirely compatible with cloudbase-init (the cloud-init
