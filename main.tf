@@ -78,6 +78,27 @@ data "template_cloudinit_config" "example" {
   gzip          = false
   base64_encode = false
   part {
+    filename     = "initialize-disks.ps1"
+    content_type = "text/x-shellscript"
+    content      = <<-EOF
+      #ps1_sysnative
+      # initialize all (non-initialized) disks with a single NTFS partition.
+      # NB we have this script because disk initialization is not yet supported by cloudbase-init.
+      # NB the output of this script appears on the cloudbase-init.log file when the
+      #    debug mode is enabled, otherwise, you will only have the exit code.
+      Get-Disk `
+        | Where-Object {$_.PartitionStyle -eq 'RAW'} `
+        | ForEach-Object {
+          Write-Host "Initializing disk #$($_.Number) ($($_.Size) bytes)..."
+          $volume = $_ `
+            | Initialize-Disk -PartitionStyle MBR -PassThru `
+            | New-Partition -AssignDriveLetter -UseMaximumSize `
+            | Format-Volume -FileSystem NTFS -NewFileSystemLabel "disk$($_.Number)" -Confirm:$false
+          Write-Host "Initialized disk #$($_.Number) ($($_.Size) bytes) as $($volume.DriveLetter):."
+        }
+      EOF
+  }
+  part {
     content_type = "text/cloud-config"
     content      = <<-EOF
       #cloud-config
@@ -174,6 +195,14 @@ resource "proxmox_virtual_environment_vm" "example" {
     ssd         = true
     discard     = "on"
     size        = 64
+  }
+  disk {
+    interface   = "scsi1"
+    file_format = "raw"
+    iothread    = true
+    ssd         = true
+    discard     = "on"
+    size        = 16
   }
   agent {
     enabled = true
