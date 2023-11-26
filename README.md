@@ -36,6 +36,13 @@ terraform plan -out=tfplan
 time terraform apply tfplan
 ```
 
+Login into the machine:
+
+```bash
+ssh-keygen -f ~/.ssh/known_hosts -R "$(terraform output --raw ip)"
+ssh "vagrant@$(terraform output --raw ip)"
+```
+
 Destroy the infrastructure:
 
 ```bash
