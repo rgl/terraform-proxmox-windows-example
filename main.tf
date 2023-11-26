@@ -45,10 +45,12 @@ variable "prefix" {
 }
 
 variable "username" {
+  type    = string
   default = "vagrant"
 }
 
 variable "password" {
+  type      = string
   sensitive = true
   # NB the password will be reset by the cloudbase-init SetUserPasswordPlugin plugin.
   # NB this value must meet the Windows password policy requirements.
