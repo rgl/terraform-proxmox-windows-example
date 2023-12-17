@@ -175,7 +175,7 @@ resource "proxmox_virtual_environment_file" "example_ci_user_data" {
 resource "proxmox_virtual_environment_vm" "example" {
   name      = var.prefix
   node_name = var.proxmox_pve_node_name
-  tags      = ["windows-2022-uefi", "example", "terraform"]
+  tags      = sort(["windows-2022-uefi", "example", "terraform"])
   clone {
     vm_id = data.proxmox_virtual_environment_vm.windows_template.vm_id
     full  = false
