@@ -1,22 +1,22 @@
 # see https://github.com/hashicorp/terraform
 terraform {
-  required_version = "1.6.4"
+  required_version = "1.6.6"
   required_providers {
     # see https://registry.terraform.io/providers/hashicorp/random
     random = {
       source  = "hashicorp/random"
-      version = "3.5.1"
+      version = "3.6.0"
     }
-    # see https://registry.terraform.io/providers/hashicorp/template
-    template = {
-      source  = "hashicorp/template"
-      version = "2.2.0"
+    # see https://registry.terraform.io/providers/hashicorp/cloudinit
+    cloudinit = {
+      source  = "hashicorp/cloudinit"
+      version = "2.3.3"
     }
     # see https://registry.terraform.io/providers/bpg/proxmox
     # see https://github.com/bpg/terraform-provider-proxmox
     proxmox = {
       source  = "bpg/proxmox"
-      version = "0.38.1"
+      version = "0.40.0"
     }
   }
 }
@@ -58,12 +58,12 @@ variable "password" {
   default = "HeyH0Password"
 }
 
-# see https://registry.terraform.io/providers/bpg/proxmox/0.38.1/docs/data-sources/virtual_environment_vms
+# see https://registry.terraform.io/providers/bpg/proxmox/0.40.0/docs/data-sources/virtual_environment_vms
 data "proxmox_virtual_environment_vms" "windows_templates" {
   tags = ["windows-2022-uefi", "template"]
 }
 
-# see https://registry.terraform.io/providers/bpg/proxmox/0.38.1/docs/data-sources/virtual_environment_vm
+# see https://registry.terraform.io/providers/bpg/proxmox/0.40.0/docs/data-sources/virtual_environment_vm
 data "proxmox_virtual_environment_vm" "windows_template" {
   node_name = data.proxmox_virtual_environment_vms.windows_templates.vms[0].node_name
   vm_id     = data.proxmox_virtual_environment_vms.windows_templates.vms[0].vm_id
@@ -74,9 +74,9 @@ data "proxmox_virtual_environment_vm" "windows_template" {
 # see https://github.com/cloudbase/cloudbase-init
 # see https://cloudbase-init.readthedocs.io/en/1.1.2/userdata.html#cloud-config
 # see https://cloudbase-init.readthedocs.io/en/1.1.2/userdata.html#userdata
-# see https://www.terraform.io/docs/providers/template/d/cloudinit_config.html
-# see https://www.terraform.io/docs/configuration/expressions.html#string-literals
-data "template_cloudinit_config" "example" {
+# see https://registry.terraform.io/providers/hashicorp/cloudinit/latest/docs/data-sources/config.html
+# see https://developer.hashicorp.com/terraform/language/expressions#string-literals
+data "cloudinit_config" "example" {
   gzip          = false
   base64_encode = false
   part {
@@ -160,18 +160,18 @@ data "template_cloudinit_config" "example" {
   }
 }
 
-# see https://registry.terraform.io/providers/bpg/proxmox/0.38.1/docs/resources/virtual_environment_file
+# see https://registry.terraform.io/providers/bpg/proxmox/0.40.0/docs/resources/virtual_environment_file
 resource "proxmox_virtual_environment_file" "example_ci_user_data" {
   content_type = "snippets"
   datastore_id = "local"
   node_name    = var.proxmox_pve_node_name
   source_raw {
     file_name = "${var.prefix}-ci-user-data.txt"
-    data      = data.template_cloudinit_config.example.rendered
+    data      = data.cloudinit_config.example.rendered
   }
 }
 
-# see https://registry.terraform.io/providers/bpg/proxmox/0.38.1/docs/resources/virtual_environment_vm
+# see https://registry.terraform.io/providers/bpg/proxmox/0.40.0/docs/resources/virtual_environment_vm
 resource "proxmox_virtual_environment_vm" "example" {
   name      = var.prefix
   node_name = var.proxmox_pve_node_name
@@ -215,7 +215,7 @@ resource "proxmox_virtual_environment_vm" "example" {
   #    implementation that is used in the windows base image).
   # see https://pve.proxmox.com/wiki/Cloud-Init_Support
   # see https://cloudbase-init.readthedocs.io/en/latest/services.html#openstack-configuration-drive
-  # see https://registry.terraform.io/providers/bpg/proxmox/0.38.1/docs/resources/virtual_environment_vm#initialization
+  # see https://registry.terraform.io/providers/bpg/proxmox/0.40.0/docs/resources/virtual_environment_vm#initialization
   initialization {
     user_data_file_id = proxmox_virtual_environment_file.example_ci_user_data.id
   }
