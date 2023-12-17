@@ -41,7 +41,7 @@ variable "proxmox_pve_node_address" {
 
 variable "prefix" {
   type    = string
-  default = "terraform-windows-example"
+  default = "example-terraform-windows"
 }
 
 variable "username" {
