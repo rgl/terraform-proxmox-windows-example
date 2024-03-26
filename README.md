@@ -7,8 +7,11 @@ Create and install the [base Windows 2022 UEFI template](https://github.com/rgl/
 Install Terraform:
 
 ```bash
-wget https://releases.hashicorp.com/terraform/1.6.6/terraform_1.6.6_linux_amd64.zip
-unzip terraform_1.6.6_linux_amd64.zip
+# see https://github.com/hashicorp/terraform/releases
+# renovate: datasource=github-releases depName=hashicorp/terraform
+terraform_version='1.6.6'
+wget "https://releases.hashicorp.com/terraform/$terraform_version/terraform_${$terraform_version}_linux_amd64.zip"
+unzip "terraform_${$terraform_version}_linux_amd64.zip"
 sudo install terraform /usr/local/bin
 rm terraform terraform_*_linux_amd64.zip
 ```
@@ -52,4 +55,11 @@ Destroy the infrastructure:
 
 ```bash
 time terraform destroy -auto-approve
+```
+
+List this repository dependencies (and which have newer versions):
+
+```bash
+export GITHUB_COM_TOKEN='YOUR_GITHUB_PERSONAL_TOKEN'
+./renovate.sh
 ```
