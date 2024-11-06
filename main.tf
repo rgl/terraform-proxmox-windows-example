@@ -1,6 +1,6 @@
 # see https://github.com/hashicorp/terraform
 terraform {
-  required_version = "1.9.7"
+  required_version = "1.9.8"
   required_providers {
     # see https://registry.terraform.io/providers/hashicorp/random
     random = {
@@ -16,7 +16,7 @@ terraform {
     # see https://github.com/bpg/terraform-provider-proxmox
     proxmox = {
       source  = "bpg/proxmox"
-      version = "0.65.0"
+      version = "0.66.3"
     }
   }
 }
@@ -58,12 +58,12 @@ variable "password" {
   default = "HeyH0Password"
 }
 
-# see https://registry.terraform.io/providers/bpg/proxmox/0.65.0/docs/data-sources/virtual_environment_vms
+# see https://registry.terraform.io/providers/bpg/proxmox/0.66.3/docs/data-sources/virtual_environment_vms
 data "proxmox_virtual_environment_vms" "windows_templates" {
   tags = ["windows-2022-uefi", "template"]
 }
 
-# see https://registry.terraform.io/providers/bpg/proxmox/0.65.0/docs/data-sources/virtual_environment_vm
+# see https://registry.terraform.io/providers/bpg/proxmox/0.66.3/docs/data-sources/virtual_environment_vm
 data "proxmox_virtual_environment_vm" "windows_template" {
   node_name = data.proxmox_virtual_environment_vms.windows_templates.vms[0].node_name
   vm_id     = data.proxmox_virtual_environment_vms.windows_templates.vms[0].vm_id
@@ -160,7 +160,7 @@ data "cloudinit_config" "example" {
   }
 }
 
-# see https://registry.terraform.io/providers/bpg/proxmox/0.65.0/docs/resources/virtual_environment_file
+# see https://registry.terraform.io/providers/bpg/proxmox/0.66.3/docs/resources/virtual_environment_file
 resource "proxmox_virtual_environment_file" "example_ci_user_data" {
   content_type = "snippets"
   datastore_id = "local"
@@ -171,7 +171,7 @@ resource "proxmox_virtual_environment_file" "example_ci_user_data" {
   }
 }
 
-# see https://registry.terraform.io/providers/bpg/proxmox/0.65.0/docs/resources/virtual_environment_vm
+# see https://registry.terraform.io/providers/bpg/proxmox/0.66.3/docs/resources/virtual_environment_vm
 resource "proxmox_virtual_environment_vm" "example" {
   name      = var.prefix
   node_name = var.proxmox_pve_node_name
@@ -215,7 +215,7 @@ resource "proxmox_virtual_environment_vm" "example" {
   #    implementation that is used in the windows base image).
   # see https://pve.proxmox.com/wiki/Cloud-Init_Support
   # see https://cloudbase-init.readthedocs.io/en/latest/services.html#openstack-configuration-drive
-  # see https://registry.terraform.io/providers/bpg/proxmox/0.65.0/docs/resources/virtual_environment_vm#initialization
+  # see https://registry.terraform.io/providers/bpg/proxmox/0.66.3/docs/resources/virtual_environment_vm#initialization
   initialization {
     user_data_file_id = proxmox_virtual_environment_file.example_ci_user_data.id
   }
