@@ -9,7 +9,7 @@ Install Terraform:
 ```bash
 # see https://github.com/hashicorp/terraform/releases
 # renovate: datasource=github-releases depName=hashicorp/terraform
-terraform_version='1.9.8'
+terraform_version='1.11.4'
 wget "https://releases.hashicorp.com/terraform/$terraform_version/terraform_${$terraform_version}_linux_amd64.zip"
 unzip "terraform_${$terraform_version}_linux_amd64.zip"
 sudo install terraform /usr/local/bin
@@ -20,7 +20,7 @@ Set your proxmox details:
 
 ```bash
 # see https://registry.terraform.io/providers/bpg/proxmox/latest/docs#argument-reference
-# see https://github.com/bpg/terraform-provider-proxmox/blob/v0.67.1/proxmoxtf/provider/provider.go#L50-L59
+# see https://github.com/bpg/terraform-provider-proxmox/blob/v0.75.0/proxmoxtf/provider/provider.go#L52-L61
 cat >secrets-proxmox.sh <<'EOF'
 unset HTTPS_PROXY
 #export HTTPS_PROXY='http://localhost:8080'
@@ -39,6 +39,7 @@ Create the infrastructure:
 export CHECKPOINT_DISABLE='1'
 export TF_LOG='DEBUG' # TRACE, DEBUG, INFO, WARN or ERROR.
 export TF_LOG_PATH='terraform.log'
+rm -f "$TF_LOG_PATH"
 terraform init
 terraform plan -out=tfplan
 time terraform apply tfplan
