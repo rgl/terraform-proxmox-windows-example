@@ -33,5 +33,9 @@ jobs:
     runs-on: ubuntu-22.04
     steps:
       - uses: actions/checkout@v5
+      - uses: hashicorp/setup-terraform@v3
+        with:
+          # renovate: datasource=github-releases depName=hashicorp/terraform
+          terraform_version: "1.13.1"
       - name: terraform fmt check
         run: terraform fmt -check -diff
