@@ -60,9 +60,16 @@ variable "password" {
   default = "HeyH0Password"
 }
 
+variable "windows_template" {
+  type    = string
+  default = "windows-2022-uefi"
+  #default = "windows-2025-uefi"
+  #default = "windows-11-24h2-uefi"
+}
+
 # see https://registry.terraform.io/providers/bpg/proxmox/0.83.0/docs/data-sources/virtual_environment_vms
 data "proxmox_virtual_environment_vms" "windows_templates" {
-  tags = ["windows-2022-uefi", "template"]
+  tags = [var.windows_template, "template"]
 }
 
 # see https://registry.terraform.io/providers/bpg/proxmox/0.83.0/docs/data-sources/virtual_environment_vm
@@ -177,7 +184,7 @@ resource "proxmox_virtual_environment_file" "example_ci_user_data" {
 resource "proxmox_virtual_environment_vm" "example" {
   name      = var.prefix
   node_name = var.proxmox_pve_node_name
-  tags      = sort(["windows-2022-uefi", "example", "terraform"])
+  tags      = sort([var.windows_template, "example", "terraform"])
   clone {
     vm_id = data.proxmox_virtual_environment_vm.windows_template.vm_id
     full  = false
