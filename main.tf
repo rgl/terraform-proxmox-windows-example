@@ -9,6 +9,7 @@ terraform {
       version = "3.7.2"
     }
     # see https://registry.terraform.io/providers/hashicorp/cloudinit
+    # see https://github.com/hashicorp/terraform-provider-cloudinit
     cloudinit = {
       source  = "hashicorp/cloudinit"
       version = "2.3.7"
