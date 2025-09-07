@@ -14,13 +14,13 @@ jobs:
       - uses: hashicorp/setup-terraform@v3
         with:
           # renovate: datasource=github-releases depName=hashicorp/terraform
-          terraform_version: "1.12.2"
+          terraform_version: "1.13.1"
       - uses: terraform-linters/setup-tflint@v5
         name: Setup
         with:
           # see https://github.com/terraform-linters/tflint/releases
           # renovate: datasource=github-releases depName=terraform-linters/tflint
-          tflint_version: v0.58.1
+          tflint_version: v0.59.1
       - name: Init
         run: tflint --init
         env:
