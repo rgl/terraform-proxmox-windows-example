@@ -3,7 +3,7 @@ on: [push]
 jobs:
   lint:
     name: Lint
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@v6
       - name: Cache the plugins directory
@@ -30,7 +30,7 @@ jobs:
         run: tflint --format compact
   fmt:
     name: terraform fmt check
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@v6
       - uses: hashicorp/setup-terraform@v3
