@@ -11,10 +11,10 @@ jobs:
         with:
           path: ~/.tflint.d/plugins
           key: tflint-${{ hashFiles('.tflint.hcl') }}
-      - uses: hashicorp/setup-terraform@v3
+      - uses: hashicorp/setup-terraform@v4
         with:
           # renovate: datasource=github-releases depName=hashicorp/terraform
-          terraform_version: "1.14.5"
+          terraform_version: "1.14.7"
       - uses: terraform-linters/setup-tflint@v6
         name: Setup
         with:
@@ -33,9 +33,9 @@ jobs:
     runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@v6
-      - uses: hashicorp/setup-terraform@v3
+      - uses: hashicorp/setup-terraform@v4
         with:
           # renovate: datasource=github-releases depName=hashicorp/terraform
-          terraform_version: "1.14.5"
+          terraform_version: "1.14.7"
       - name: terraform fmt check
         run: terraform fmt -check -diff
