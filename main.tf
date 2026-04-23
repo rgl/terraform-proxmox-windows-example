@@ -72,10 +72,10 @@ data "proxmox_virtual_environment_vms" "windows_templates" {
   tags = [var.windows_template, "template"]
 }
 
-# see https://registry.terraform.io/providers/bpg/proxmox/0.103.0/docs/data-sources/virtual_environment_vm
-data "proxmox_virtual_environment_vm" "windows_template" {
+# see https://registry.terraform.io/providers/bpg/proxmox/0.103.0/docs/data-sources/vm
+data "proxmox_vm" "windows_template" {
   node_name = data.proxmox_virtual_environment_vms.windows_templates.vms[0].node_name
-  vm_id     = data.proxmox_virtual_environment_vms.windows_templates.vms[0].vm_id
+  id        = data.proxmox_virtual_environment_vms.windows_templates.vms[0].vm_id
 }
 
 # the virtual machine cloudbase-init cloud-config.
@@ -186,7 +186,7 @@ resource "proxmox_virtual_environment_vm" "example" {
   node_name = var.proxmox_pve_node_name
   tags      = sort([var.windows_template, "example", "terraform"])
   clone {
-    vm_id = data.proxmox_virtual_environment_vm.windows_template.vm_id
+    vm_id = data.proxmox_vm.windows_template.id
     full  = false
   }
   cpu {
