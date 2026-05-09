@@ -14,7 +14,7 @@ jobs:
       - uses: hashicorp/setup-terraform@v4
         with:
           # renovate: datasource=github-releases depName=hashicorp/terraform
-          terraform_version: "1.14.9"
+          terraform_version: "1.15.2"
       - uses: terraform-linters/setup-tflint@v6
         name: Setup
         with:
@@ -36,6 +36,6 @@ jobs:
       - uses: hashicorp/setup-terraform@v4
         with:
           # renovate: datasource=github-releases depName=hashicorp/terraform
-          terraform_version: "1.14.9"
+          terraform_version: "1.15.2"
       - name: terraform fmt check
         run: terraform fmt -check -diff
