@@ -1,35 +1,41 @@
 # see https://github.com/hashicorp/terraform
 terraform {
-  required_version = "1.15.2"
+  required_version = "1.15.7"
   required_providers {
     # see https://registry.terraform.io/providers/hashicorp/random
     # see https://github.com/hashicorp/terraform-provider-random
     random = {
       source  = "hashicorp/random"
-      version = "3.8.1"
+      version = "3.9.0"
     }
     # see https://registry.terraform.io/providers/hashicorp/cloudinit
     # see https://github.com/hashicorp/terraform-provider-cloudinit
     cloudinit = {
       source  = "hashicorp/cloudinit"
-      version = "2.3.7"
+      version = "2.4.0"
     }
     # see https://registry.terraform.io/providers/bpg/proxmox
     # see https://github.com/bpg/terraform-provider-proxmox
     proxmox = {
       source  = "bpg/proxmox"
-      version = "0.106.0"
+      version = "0.111.0"
     }
   }
 }
 
 provider "proxmox" {
   ssh {
+    username = var.proxmox_pve_node_username
     node {
       name    = var.proxmox_pve_node_name
       address = var.proxmox_pve_node_address
     }
   }
+}
+
+variable "proxmox_pve_node_username" {
+  type    = string
+  default = "vagrant"
 }
 
 variable "proxmox_pve_node_name" {
@@ -62,17 +68,17 @@ variable "password" {
 
 variable "windows_template" {
   type    = string
-  default = "windows-2022-uefi"
-  #default = "windows-2025-uefi"
-  #default = "windows-11-24h2-uefi"
+  default = "windows-2022-uefi" # NB in my machine, this os vm, at idle, consumes ~0.5% cpu.
+  # default = "windows-2025-uefi" # NB in my machine, this os vm, at idle, consumes ~2.1% cpu.
+  # default = "windows-11-24h2-uefi" # NB in my machine, this os vm, at idle, consumes ~1.9% cpu.
 }
 
-# see https://registry.terraform.io/providers/bpg/proxmox/0.106.0/docs/data-sources/virtual_environment_vms
+# see https://registry.terraform.io/providers/bpg/proxmox/0.111.0/docs/data-sources/virtual_environment_vms
 data "proxmox_virtual_environment_vms" "windows_templates" {
   tags = [var.windows_template, "template"]
 }
 
-# see https://registry.terraform.io/providers/bpg/proxmox/0.106.0/docs/data-sources/vm
+# see https://registry.terraform.io/providers/bpg/proxmox/0.111.0/docs/data-sources/vm
 data "proxmox_vm" "windows_template" {
   node_name = data.proxmox_virtual_environment_vms.windows_templates.vms[0].node_name
   id        = data.proxmox_virtual_environment_vms.windows_templates.vms[0].vm_id
@@ -169,7 +175,7 @@ data "cloudinit_config" "example" {
   }
 }
 
-# see https://registry.terraform.io/providers/bpg/proxmox/0.106.0/docs/resources/virtual_environment_file
+# see https://registry.terraform.io/providers/bpg/proxmox/0.111.0/docs/resources/virtual_environment_file
 resource "proxmox_virtual_environment_file" "example_ci_user_data" {
   content_type = "snippets"
   datastore_id = "local"
@@ -180,7 +186,7 @@ resource "proxmox_virtual_environment_file" "example_ci_user_data" {
   }
 }
 
-# see https://registry.terraform.io/providers/bpg/proxmox/0.106.0/docs/resources/virtual_environment_vm
+# see https://registry.terraform.io/providers/bpg/proxmox/0.111.0/docs/resources/virtual_environment_vm
 resource "proxmox_virtual_environment_vm" "example" {
   name      = var.prefix
   node_name = var.proxmox_pve_node_name
@@ -224,7 +230,7 @@ resource "proxmox_virtual_environment_vm" "example" {
   #    implementation that is used in the windows base image).
   # see https://pve.proxmox.com/wiki/Cloud-Init_Support
   # see https://cloudbase-init.readthedocs.io/en/latest/services.html#openstack-configuration-drive
-  # see https://registry.terraform.io/providers/bpg/proxmox/0.106.0/docs/resources/virtual_environment_vm#initialization
+  # see https://registry.terraform.io/providers/bpg/proxmox/0.111.0/docs/resources/virtual_environment_vm#initialization
   initialization {
     user_data_file_id = proxmox_virtual_environment_file.example_ci_user_data.id
   }
