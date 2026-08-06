@@ -1,4 +1,4 @@
-# Usage (from a Ubuntu 24.04 host)
+# Usage (from a Ubuntu 26.04 host)
 
 [![Lint](https://github.com/rgl/terraform-proxmox-windows-example/actions/workflows/lint.yml/badge.svg)](https://github.com/rgl/terraform-proxmox-windows-example/actions/workflows/lint.yml)
 
@@ -9,7 +9,7 @@ Install Terraform:
 ```bash
 # see https://github.com/hashicorp/terraform/releases
 # renovate: datasource=github-releases depName=hashicorp/terraform
-terraform_version='1.15.7'
+terraform_version='1.15.8'
 wget "https://releases.hashicorp.com/terraform/$terraform_version/terraform_${$terraform_version}_linux_amd64.zip"
 unzip "terraform_${$terraform_version}_linux_amd64.zip"
 sudo install terraform /usr/local/bin
@@ -20,7 +20,7 @@ Set your proxmox details:
 
 ```bash
 # see https://registry.terraform.io/providers/bpg/proxmox/latest/docs#argument-reference
-# see https://github.com/bpg/terraform-provider-proxmox/blob/v0.111.0/proxmoxtf/provider/provider.go#L52-L61
+# see https://github.com/bpg/terraform-provider-proxmox/blob/v0.111.1/proxmoxtf/provider/provider.go#L52-L61
 # NB this expects that the proxmox_pve_node_username user has passwordless ssh key authentication and sudo.
 cat >secrets-proxmox.sh <<'EOF'
 unset HTTPS_PROXY
