@@ -52,6 +52,8 @@ Login into the machine using SSH:
 ```bash
 ssh-keygen -f ~/.ssh/known_hosts -R "$(terraform output --raw ip)"
 ssh "vagrant@$(terraform output --raw ip)"
+pwsh -c Get-Tpm
+pwsh -c Get-TpmEndorsementKeyInfo
 exit # ssh
 ```
 
@@ -62,6 +64,8 @@ pwsh
 Enter-PSSession -HostName "vagrant@$(terraform output --raw ip)"
 $PSVersionTable
 whoami /all
+Get-Tpm
+Get-TpmEndorsementKeyInfo
 exit # Enter-PSSession
 exit # pwsh
 ```

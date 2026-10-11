@@ -205,6 +205,9 @@ resource "proxmox_virtual_environment_vm" "example" {
   network_device {
     bridge = "vmbr0"
   }
+  tpm_state {
+    version = "v2.0"
+  }
   disk {
     interface   = "scsi0"
     file_format = "raw"
